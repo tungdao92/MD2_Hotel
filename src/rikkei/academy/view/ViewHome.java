@@ -39,6 +39,13 @@ public class ViewHome {
             case 1:
                 new ViewMenu().showListUser();
                 break;
+            case 2:
+                new ViewMenu().deleteUser();
+                break;
+            case 3:
+                new ViewRoom().showListRoomUser();
+                break;
+
             case 0:
                 userController.logout();
                 new ViewMenu().menu();
@@ -49,7 +56,7 @@ public class ViewHome {
     private void ViewUser() {
         System.out.println("WELCOME USER:  "+ currentUser.getName());
         System.out.println("1: Book room");
-        System.out.println("2: Booked room");
+        System.out.println("2: List Booked room");
         System.out.println("3: Delete booked room");
         System.out.println("0: LogOut");
 

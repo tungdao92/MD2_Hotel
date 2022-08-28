@@ -79,6 +79,16 @@ public class ViewRoom {
         new ViewHome();
     }
 
+
+    public void showListRoomUser(){
+        System.out.printf("| %-10s | %-15s | %-15s | %-15s | %-15s| %-15s | %n", "id", "type(Số giường)", "days", "price", "totalMoney","User");
+        for (int i = 0; i < roomList.size(); i++){
+            System.out.printf("| %-10s | %-15s | %-15s | %-15s | %-15s | %-15s | %n", roomList.get(i).getId(), roomList.get(i).getTypeRoom(),
+                    roomList.get(i).getDays(), roomList.get(i).getPrice(), roomList.get(i).getTotalMoney(),roomList.get(i).getUser().getUsername());
+        }
+        new ViewHome();
+    }
+
     public void deleteRoom(){
         System.out.println("Enter ID room want delete");
         int id = Integer.parseInt(Config.scanner().nextLine());

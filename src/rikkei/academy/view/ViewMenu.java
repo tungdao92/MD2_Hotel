@@ -1,10 +1,12 @@
 package rikkei.academy.view;
 
 import rikkei.academy.config.Config;
+import rikkei.academy.controller.RoomController;
 import rikkei.academy.controller.UserController;
 import rikkei.academy.dto.request.SignInDTO;
 import rikkei.academy.dto.request.SignUpDTO;
 import rikkei.academy.dto.response.ResponseMessenger;
+import rikkei.academy.model.Room;
 import rikkei.academy.model.User;
 
 import java.util.HashSet;
@@ -14,7 +16,9 @@ import java.util.regex.Pattern;
 
 public class ViewMenu {
     UserController userController = new UserController();
+    RoomController roomController = new RoomController();
     List<User> userList = userController.showListUser();
+    List<Room> roomList = roomController.showListRoom();
 
     public void menu() {
         System.out.println("---______MENU_____----");
@@ -155,14 +159,38 @@ public class ViewMenu {
     }
 
     public void showListUser() {
-        System.out.println("=======ID====NAME=====USERNAME====EMAIL=======AVATAR=======STATUS=====ROLE=====");
+        System.out.printf("%-10s |%-15s |%-15s |%-15s |%-15s |%-15s |%-15s|%-15s| %n", "ID", "NAME", "USERNAME", "EMAIL", "AVATAR", "STATUS", "ROLE","PASSWORD");
         for (int i = 0; i < userList.size(); i++) {
-            System.out.println("======" + userList.get(i).getId() + "=======" + userList.get(i).getName() + "======" + userList.get(i).getUsername() +
-                    "=====" + userList.get(i).getEmail() + "====="
-                    + userList.get(i).getAvatar() + "=====" + userList.get(i).isStatus() + "=====" + userList.get(i).getRoles().iterator().next().getRoleName() + "====="
-                    + "password: " + userList.get(i).getPassword());
+            System.out.printf("%-10s |%-15s |%-15s |%-15s |%-15s |%-15s |%-15s|%-15s| %n", userList.get(i).getId(), userList.get(i).getName(), userList.get(i).getUsername(),
+                    userList.get(i).getEmail(), userList.get(i).getAvatar(), userList.get(i).isStatus(), userList.get(i).getRoles().iterator().next().getRoleName(), userList.get(i).getPassword());
         }
         new ViewHome();
+    }
+
+    public void deleteUser(){
+        System.out.println("Enter ID user want delete");
+        int id = Integer.parseInt(Config.scanner().nextLine());
+        if (!isValid(id)){
+            System.out.println("Not pound");
+            new ViewHome();
+        }
+        System.out.println("You want to delete ( Y/N ) ?");
+        String check = Config.scanner().nextLine();
+        if (check.equalsIgnoreCase("Y")){
+            userController.deleteUser(id);
+            userController.showListUser();
+            showListUser();
+        } else if (check.equalsIgnoreCase("N")){
+            new ViewHome();
+        }
+        new ViewHome();
+    }
+
+
+
+    private boolean isValid(int id){
+        int size = userController.showListUser().size();
+        return id >= 0 && id<= size;
     }
 
 }

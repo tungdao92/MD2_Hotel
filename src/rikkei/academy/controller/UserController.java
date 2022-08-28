@@ -18,15 +18,16 @@ import java.util.Set;
 public class UserController {
     IUserService userService = new UserServiceIMPL();
     IRoleSerVice roleSerVice = new RoleServiceIMPL();
+
     public List<User> showListUser() {
         return userService.findAll();
     }
 
-    public ResponseMessenger register (SignUpDTO signUpDTO) {
-        if (userService.existsByUserName(signUpDTO.getUsername())){
+    public ResponseMessenger register(SignUpDTO signUpDTO) {
+        if (userService.existsByUserName(signUpDTO.getUsername())) {
             return new ResponseMessenger("username_existed");
         }
-        if (userService.existsByEmail(signUpDTO.getEmail())){
+        if (userService.existsByEmail(signUpDTO.getEmail())) {
             return new ResponseMessenger("email_existed");
         }
 
@@ -38,10 +39,10 @@ public class UserController {
                     Role adminRole = roleSerVice.findByName(RoleName.ADMIN);
                     roles.add(adminRole);
                     break;
-                    case "user":
-                        Role userRole = roleSerVice.findByName(RoleName.USER);
-                        roles.add(userRole);
-                        break;
+                case "user":
+                    Role userRole = roleSerVice.findByName(RoleName.USER);
+                    roles.add(userRole);
+                    break;
             }
         });
         User user = new User(signUpDTO.getId(), signUpDTO.getName(), signUpDTO.getUsername(), signUpDTO.getEmail(), signUpDTO.getPassword(), roles);
@@ -51,8 +52,8 @@ public class UserController {
     }
 
 
-    public ResponseMessenger login (SignInDTO signUpDTO) {
-        if(userService.checkLogin(signUpDTO.getUsername(), signUpDTO.getPassword())){
+    public ResponseMessenger login(SignInDTO signUpDTO) {
+        if (userService.checkLogin(signUpDTO.getUsername(), signUpDTO.getPassword())) {
             User userLogin = userService.findByUserName(signUpDTO.getUsername());
             userService.saveCurrentUser(userLogin);
             return new ResponseMessenger("success");
@@ -61,12 +62,16 @@ public class UserController {
         }
     }
 
-    public User getCurrentUser(){
+    public User getCurrentUser() {
         return userService.getCurrentUser();
     }
 
-    public void logout(){
+    public void logout() {
         userService.saveCurrentUser(null);
+    }
+
+    public void deleteUser(int id) {
+        userService.deleteById(id);
     }
 
 }
