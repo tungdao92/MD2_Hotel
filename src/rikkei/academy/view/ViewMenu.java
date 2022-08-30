@@ -9,6 +9,7 @@ import rikkei.academy.dto.response.ResponseMessenger;
 import rikkei.academy.model.Room;
 import rikkei.academy.model.User;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,6 +25,7 @@ public class ViewMenu {
         System.out.println("---______MENU_____----");
         System.out.println("1: Register");
         System.out.println("2: Login");
+        System.out.println("3: Show Room Empty");
         int choice = Integer.parseInt(Config.scanner().nextLine());
         switch (choice) {
             case 1:
@@ -32,8 +34,14 @@ public class ViewMenu {
             case 2:
                 formLogin();
                 break;
+            case 3:
+                new ViewMenu().showRoomEmptyMenu();
+                break;
         }
     }
+
+
+
 
 
     private void formRegister() {
@@ -139,7 +147,7 @@ public class ViewMenu {
         while (true) {
             System.out.println("Enter the password: ");
             password = Config.scanner().nextLine();
-            validatePassword = Pattern.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{1,10}$\n", password);
+            validatePassword = Pattern.matches("[a-zA-Z0-9]{1,20}", password);
             if (validatePassword) {
                 break;
             } else {
@@ -164,7 +172,7 @@ public class ViewMenu {
         System.out.printf("%-10s |%-15s |%-15s |%-15s |%-15s |%-15s |%-15s|%-15s| %n", "ID", "NAME", "USERNAME", "EMAIL", "AVATAR", "STATUS", "ROLE", "PASSWORD");
         for (int i = 0; i < userList.size(); i++) {
             System.out.printf("%-10s |%-15s |%-15s |%-15s |%-15s |%-15s |%-15s|%-15s| %n", userList.get(i).getId(), userList.get(i).getName(), userList.get(i).getUsername(),
-                    userList.get(i).getEmail(), userList.get(i).getAvatar(), userList.get(i).isStatus(), userList.get(i).getRoles().iterator().next().getRoleName(), userList.get(i).getPassword());
+                    userList.get(i).getEmail(), userList.get(i).getAvatar(), (userList.get(i).isStatus()?"Blocked":"Not Blocked"), userList.get(i).getRoles().iterator().next().getRoleName(), userList.get(i).getPassword());
         }
 //        new ViewHome();
     }
@@ -199,7 +207,7 @@ public class ViewMenu {
         while (true) {
             System.out.println("Enter old password");
             oldPassword = Config.scanner().nextLine();
-            if (oldPassword.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{1,10}$")) {
+            if (oldPassword.matches("[a-zA-Z0-9]{1,20}")) {
                 break;
             } else {
                 System.out.println("Passwords do not match");
@@ -224,6 +232,20 @@ public class ViewMenu {
                     new ViewMenu().menu();
             }
 
+        }
+
+    }
+
+    public void  showRoomEmptyMenu() {
+        System.out.println("---______SHOW_ROOMS_EMPTY_____----");
+        System.out.printf("%-10s |%-15s |%-15s| %-15s %n", "ID", "TYPE", "PRICE", "STATUS ROOM");
+        for (Room room : roomList) {
+            System.out.printf("%-10d |%-15s |%-15d |%-15s %n ", room.getId(), room.getTypeRoom(), room.getPrice(), (room.isStatus() ? "Empty" : "Not Empty"));
+        }
+        System.out.println("Enter 'back' to back menu");
+        String back = Config.scanner().nextLine();
+        if (back.equalsIgnoreCase("back")) {
+            new ViewMenu().menu();
         }
     }
 

@@ -1,5 +1,6 @@
 package rikkei.academy.controller;
 
+import rikkei.academy.dto.response.ResponseMessenger;
 import rikkei.academy.model.Room;
 import rikkei.academy.service.room.IRoomService;
 import rikkei.academy.service.room.RoomServiceIMPL;
@@ -32,5 +33,17 @@ public class RoomController {
 
     public void deleteRoom( int id ) {
         roomService.deleteById(id);
+    }
+
+    public ResponseMessenger bookRoom(int id){
+        if(roomService.findById(id) == null || id == 0){
+            return new ResponseMessenger("not_found");
+        }
+        roomService.changeStatus(id);
+        boolean check = roomService.findById(id).isStatus();
+        if(!check){
+            return new ResponseMessenger("booking");
+        }
+        return new ResponseMessenger("cancel_booking");
     }
 }

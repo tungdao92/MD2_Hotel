@@ -11,23 +11,32 @@ public class Room implements Serializable {
     private int totalMoney;
     private User user;
 
+    private boolean status;
 
-    public Room(int id, int typeRoom, int days, int price, int totalMoney, User user) {
+    public Room(int id, int days, int totalMoney) {
+        this.id = id;
+        this.days = days;
+        this.totalMoney = totalMoney;
+    }
+
+    public Room(int id, int typeRoom,int price, boolean status) {
+        this.id = id;
+        this.typeRoom = typeRoom;
+        this.price = price;
+        this.status = status;
+    }
+
+    public Room(int id, int typeRoom, int days, int price, int totalMoney, User user, boolean status) {
         this.id = id;
         this.typeRoom = typeRoom;
         this.days = days;
         this.price = price;
         this.totalMoney = totalMoney;
         this.user = user;
+        this.status = status;
     }
 
-    public Room(int id, int type, int days, int price, int totalMoney) {
-        this.id = id;
-        this.typeRoom = type;
-        this.days = days;
-        this.price = price;
-        this.totalMoney = totalMoney;
-    }
+
 
     public int getId() {
         return id;
@@ -75,6 +84,14 @@ public class Room implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     @Override

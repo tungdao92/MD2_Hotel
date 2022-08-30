@@ -25,4 +25,8 @@ public class CategoryController {
         Category category1 = categoryService.findById(id);
         category1.setNameCategory(newCategory.getNameCategory());
     }
+
+    public void deleteCategory(int id) {
+        categoryService.deleteById(id);
+    }
 }

@@ -7,8 +7,6 @@ import rikkei.academy.model.User;
 
 import java.util.ArrayList;
 
-import static com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type.Int;
-
 public class ViewHome {
     UserController userController = new UserController();
     User currentUser = userController.getCurrentUser();
@@ -22,17 +20,21 @@ public class ViewHome {
             case USER:
                 ViewUser();
                 break;
+            case PM:
+                ViewPM();
+                break;
         }
     }
 
 
     private void ViewAdmin() {
         System.out.println("WELCOME ADMIN:  " + currentUser.getName());
-        System.out.println("1: Manager User");
+        System.out.println("1: User Manager");
         System.out.println("2: Category Manager");
-        System.out.println("3: Show list of Room");
-        System.out.println("4: Hủy phòng khách đặt");
-        System.out.println("5: Thay đổi phòng khách đặt");
+        System.out.println("3: Room Manager");
+        System.out.println("4: ");
+        System.out.println("5: ");
+        System.out.println("6: ");
         System.out.println("9: Change passwords");
         System.out.println("0: LogOut");
         int choiceAdmin = Integer.parseInt(Config.scanner().nextLine());
@@ -40,11 +42,14 @@ public class ViewHome {
             case 1:
                 managerUser();
                 break;
-                case 2:
-                    new ViewCategory().menuCategory();
-                    break;
+            case 2:
+                new ViewCategory().menuCategory();
+                break;
             case 3:
-                new ViewRoom().showListRoomUser();
+                managerRoom();
+                break;
+            case 4:
+                new ViewRoom().showRoomEmpty();
                 break;
             case 9:
                 new ViewMenu().changePassword();
@@ -53,6 +58,23 @@ public class ViewHome {
             case 0:
                 userController.logout();
                 new ViewMenu().menu();
+        }
+    }
+
+    public void managerRoom() {
+        System.out.println("MANAGER ROOM");
+        System.out.println("1: Create a new room");
+        System.out.println("2: List Room ");
+
+        int choice = Integer.parseInt(Config.scanner().nextLine());
+        switch (choice) {
+            case 1:
+                new ViewRoom().creatRoom();
+                break;
+                case 2:
+                    new ViewRoom().showRoomEmpty();
+                    break;
+
         }
     }
 
@@ -79,48 +101,69 @@ public class ViewHome {
             case 4:
                 new ViewMenu().showListUser();
                 break;
-                case 9:
-                    new ViewHome();
-                    break;
-                    case 0:
-                        userController.logout();
-                        new ViewMenu().menu();
-                        break;
+            case 9:
+                new ViewHome();
+                break;
+            case 0:
+                userController.logout();
+                new ViewMenu().menu();
+                break;
 
         }
     }
 
 
     public void ViewPM() {
-        System.out.println("WELCOME PM: " + currentUser.getName());
+        System.out.println("WELCOME PM:  " + currentUser.getName());
+        System.out.println("1: User Manager");
+        System.out.println("2: Category Manager");
+        System.out.println("3: List Room booked");
+        System.out.println("4: List Room empty");
+        System.out.println("5: Hủy phòng khách đặt");
+        System.out.println("5: Thay đổi phòng khách đặt");
+        System.out.println("9: Change passwords");
         System.out.println("0: LogOut");
-
-        int choice = Integer.parseInt(Config.scanner().nextLine());
-        switch (choice) {
+        int choiceAdmin = Integer.parseInt(Config.scanner().nextLine());
+        switch (choiceAdmin) {
             case 1:
+                managerUser();
+                break;
+            case 2:
+                new ViewCategory().menuCategory();
+                break;
+            case 3:
+
+                case 4:
+                    new ViewRoom().showRoomEmpty();
+                    break;
+            case 9:
+                new ViewMenu().changePassword();
+                break;
+
+            case 0:
                 userController.logout();
                 new ViewMenu().menu();
-                break;
         }
     }
 
     private void ViewUser() {
         System.out.println("WELCOME USER:  " + currentUser.getName());
-        System.out.println("1: Book room");
-        System.out.println("2: List Booked room");
-        System.out.println("3: Delete booked room");
+        System.out.println("1: List room Empty");
+        System.out.println("2: Book room");
+        System.out.println("3: List Booked room");
+        System.out.println("4: Delete booked room");
         System.out.println("9: Change password");
         System.out.println("0: LogOut");
 
         int choiceUser = Integer.parseInt(Config.scanner().nextLine());
         switch (choiceUser) {
             case 1:
-                new ViewRoom().formCreateRoom();
+                new ViewRoom().showRoomEmpty();
                 break;
             case 2:
-                new ViewRoom().showListRoom();
+                new ViewRoom().bookRoom();
                 break;
-            case 3:
+            case 4:
                 new ViewRoom().deleteRoom();
                 break;
             case 9:

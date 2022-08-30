@@ -16,6 +16,7 @@ public class ViewCategory {
         System.out.println("2: Show list category");
         System.out.println("3: Detail category");
         System.out.println("4: Edit category");
+        System.out.println("5: Delete category");
         int choice = Integer.parseInt(Config.scanner().nextLine());
         switch (choice) {
             case 1:
@@ -30,6 +31,29 @@ public class ViewCategory {
             case 4:
                 editCategory();
                 break;
+                case 5:
+                    deleteCategory();
+                    break;
+        }
+    }
+
+    private void deleteCategory() {
+        System.out.println("Enter ID to delete");
+        int idDelete = Integer.parseInt(Config.scanner().nextLine());
+        if (categoryController.detailCategory(idDelete) == null){
+            System.out.println(" ID category not existed");
+            new ViewCategory().menuCategory();
+        } else {
+            System.out.println("You want to delete the category (Y / N) ?");
+            String check = Config.scanner().nextLine();
+            if (check.equalsIgnoreCase("Y")) {
+                System.out.println("Delete category successfully");
+                categoryController.deleteCategory(idDelete);
+                categoryController.showListCategory();
+                showListCategory();
+            } else if (check.equalsIgnoreCase("N")) {
+                new ViewCategory().menuCategory();
+            }
         }
     }
 
@@ -108,11 +132,13 @@ public class ViewCategory {
     }
 
     public void showListCategory() {
-        System.out.println("-----ID-----Name-----Name-----User-----");
+        System.out.printf("|%-15s | %-15s | %-15s | %n","ID", "Name Category","Name User");
         for (int i = 0; i < categoryList.size(); i++) {
-            System.out.println("-----" + categoryList.get(i).getId() + "-----" + categoryList.get(i).getNameCategory() + "-----" +  categoryList.get(i).getUser().getUsername() + "-----");
+            System.out.printf("|%-15d | %-15s | %-15s | %n", categoryList.get(i).getId(), categoryList.get(i).getNameCategory(), categoryList.get(i).getUser().getName());
+//            System.out.println("-----" + categoryList.get(i).getId() + "-----" + categoryList.get(i).getNameCategory() + "-----" +  categoryList.get(i).getUser().getUsername() + "-----");
         }
         new ViewCategory().menuCategory();
     }
+
 
 }
