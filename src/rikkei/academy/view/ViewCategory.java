@@ -17,6 +17,7 @@ public class ViewCategory {
         System.out.println("3: Detail category");
         System.out.println("4: Edit category");
         System.out.println("5: Delete category");
+        System.out.println("6: Back to menu");
         int choice = Integer.parseInt(Config.scanner().nextLine());
         switch (choice) {
             case 1:
@@ -31,16 +32,18 @@ public class ViewCategory {
             case 4:
                 editCategory();
                 break;
-                case 5:
-                    deleteCategory();
-                    break;
+            case 5:
+                deleteCategory();
+                break;
+            case 6:
+                new ViewHome();
         }
     }
 
     private void deleteCategory() {
         System.out.println("Enter ID to delete");
         int idDelete = Integer.parseInt(Config.scanner().nextLine());
-        if (categoryController.detailCategory(idDelete) == null){
+        if (categoryController.detailCategory(idDelete) == null) {
             System.out.println(" ID category not existed");
             new ViewCategory().menuCategory();
         } else {
@@ -60,7 +63,7 @@ public class ViewCategory {
     private void detailCategory() {
         System.out.println("Enter id category");
         int idDetail = Integer.parseInt(Config.scanner().nextLine());
-        if (categoryController.detailCategory(idDetail) == null){
+        if (categoryController.detailCategory(idDetail) == null) {
             System.out.println(" ID category not existed");
         } else {
             Category category = categoryController.detailCategory(idDetail);
@@ -76,7 +79,7 @@ public class ViewCategory {
     private void editCategory() {
         System.out.println("Enter id category to edit");
         int idEdit = Integer.parseInt(Config.scanner().nextLine());
-        if (categoryController.detailCategory(idEdit) == null){
+        if (categoryController.detailCategory(idEdit) == null) {
             System.out.println(" ID category not existed");
         } else {
             Category category = categoryController.detailCategory(idEdit);
@@ -93,7 +96,7 @@ public class ViewCategory {
         }
         System.out.println("Nhập vào phím bất kì để tiếp tục - Nhập vào back để thoát: ");
         String backMenu = Config.scanner().nextLine();
-        if(backMenu.equalsIgnoreCase("back")){
+        if (backMenu.equalsIgnoreCase("back")) {
             new ViewCategory().menuCategory();
         }
 
@@ -105,14 +108,14 @@ public class ViewCategory {
         if (categoryList.size() == 0) {
             id = 1;
         } else {
-            id = categoryList.get(categoryList.size()-1).getId() + 1;
+            id = categoryList.get(categoryList.size() - 1).getId() + 1;
         }
         String name;
 
         while (true) {
             System.out.println("Enter the name category");
             name = Config.scanner().nextLine();
-            if (!name.trim().equals("")){
+            if (!name.trim().equals("")) {
                 break;
             }
         }
@@ -132,7 +135,7 @@ public class ViewCategory {
     }
 
     public void showListCategory() {
-        System.out.printf("|%-15s | %-15s | %-15s | %n","ID", "Name Category","Name User");
+        System.out.printf("|%-15s | %-15s | %-15s | %n", "ID", "Name Category", "Name User");
         for (int i = 0; i < categoryList.size(); i++) {
             System.out.printf("|%-15d | %-15s | %-15s | %n", categoryList.get(i).getId(), categoryList.get(i).getNameCategory(), categoryList.get(i).getUser().getName());
 //            System.out.println("-----" + categoryList.get(i).getId() + "-----" + categoryList.get(i).getNameCategory() + "-----" +  categoryList.get(i).getUser().getUsername() + "-----");

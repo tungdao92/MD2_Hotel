@@ -24,7 +24,7 @@ public class UserServiceIMPL implements IUserService, Serializable {
             roles.add(new RoleServiceIMPL().findByName(RoleName.ADMIN));
             userList.add(
                     new User(
-                            0, "ADMIN","admin", "admin@admin.com","Aadmin@123", roles
+                            0, "ADMIN","admin", "admin@admin.com","admin", roles
                     )
             );
         }

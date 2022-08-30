@@ -92,6 +92,15 @@ public class ViewRoom {
         totalMoney = days * roomList.get(id).getPrice();
         System.out.println("Đặt phòng thành công");
         System.out.println(" Tổng tiền là: " + totalMoney + "K");
+        System.out.println("Bạn có muốn dùng thêm dịch vụ 'từ A tới Z' của chúng tôi. Giá là 1000k. (Y / N)");
+        String check = Config.scanner().nextLine();
+        if(check.equalsIgnoreCase("Y")) {
+            System.out.println("Chúc bạn vui vẻ");
+            totalMoney = totalMoney + 1000;
+            System.out.println("Tổng tiền phải thanh toán: " + totalMoney);
+        } if(check.equalsIgnoreCase("N")) {
+            System.out.println("Thank you!");
+        }
 
         System.out.println("Quý khách hãy mang chứng minh thư kèm mã đặt phòng tới quầy lễ tân để nhận phòng");
         Room room = new Room(id, days, totalMoney);

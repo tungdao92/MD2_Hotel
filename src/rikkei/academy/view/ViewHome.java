@@ -85,7 +85,7 @@ public class ViewHome {
         System.out.println("3: Block user");
         System.out.println("4: List users");
         System.out.println("9: Back Menu");
-        System.out.println("0: LogOut");
+
 
 
         int choice = Integer.parseInt(Config.scanner().nextLine());
@@ -94,6 +94,7 @@ public class ViewHome {
                 new ViewMenu().deleteUser();
                 break;
             case 2:
+                new ViewMenu().changeRole();
                 break;
             case 3:
                 new ViewMenu().blockUser();
@@ -104,10 +105,7 @@ public class ViewHome {
             case 9:
                 new ViewHome();
                 break;
-            case 0:
-                userController.logout();
-                new ViewMenu().menu();
-                break;
+
 
         }
     }

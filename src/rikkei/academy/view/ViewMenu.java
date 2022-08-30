@@ -268,5 +268,24 @@ public class ViewMenu {
                     break;
             }
         }
+        public void changeRole(){
+        showListUser();
+            System.out.println("Enter ID user to change role");
+            int id = Integer.parseInt(Config.scanner().nextLine());
+            System.out.println("Enter Role to change. (pmm / user)");
+            String roleName = Config.scanner().nextLine();
+            ResponseMessenger messenger = userController.changeRole(id, roleName);
 
+            switch (messenger.getMessage()) {
+                case "success":
+                    System.out.println("Change role successfully");
+                    break;
+                case "invalid_role":
+                    System.out.println("Invalid role");
+                    break;
+                    case "not_found":
+                        System.out.println("ID not found");
+                        break;
+            }
+        }
 }
