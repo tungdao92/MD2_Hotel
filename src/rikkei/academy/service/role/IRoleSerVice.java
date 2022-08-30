@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface IRoleSerVice {
     List<Role> findAll();
+    void save(Role role);
     Role findByName(RoleName roleName);
 }

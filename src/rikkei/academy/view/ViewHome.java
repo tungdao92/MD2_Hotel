@@ -49,7 +49,7 @@ public class ViewHome {
                 managerRoom();
                 break;
             case 4:
-                new ViewRoom().showRoomEmpty();
+                new ViewRoom().showListRoom();
                 break;
             case 9:
                 new ViewMenu().changePassword();
@@ -62,30 +62,44 @@ public class ViewHome {
     }
 
     public void managerRoom() {
-        System.out.println("MANAGER ROOM");
+        System.out.println("ROOM MANAGER");
         System.out.println("1: Create a new room");
         System.out.println("2: List Room ");
+        System.out.println("3: Delete a room");
+        System.out.println("4: Room booked");
+        System.out.println("9: Tổng doanh thu");
+        System.out.println("0: Back menu");
 
         int choice = Integer.parseInt(Config.scanner().nextLine());
         switch (choice) {
             case 1:
                 new ViewRoom().creatRoom();
                 break;
-                case 2:
-                    new ViewRoom().showRoomEmpty();
+            case 2:
+                new ViewRoom().showListRoom();
+                break;
+            case 3:
+                new ViewRoom().deleteRoom();
+                break;
+                case 4:
+                    new ViewRoom().showListRoomBooked();
                     break;
+            case 9:
+                new ViewRoom().totalMoneyRoom();
+            case 0:
+                new ViewHome();
+                break;
 
         }
     }
 
     private void managerUser() {
-        System.out.println("MANAGER USER");
+        System.out.println("USER MANAGER");
         System.out.println("1: Delete user");
         System.out.println("2: Change Role");
         System.out.println("3: Block user");
         System.out.println("4: List users");
         System.out.println("9: Back Menu");
-
 
 
         int choice = Integer.parseInt(Config.scanner().nextLine());
@@ -103,7 +117,7 @@ public class ViewHome {
                 new ViewMenu().showListUser();
                 break;
             case 9:
-                new ViewHome();
+                new ViewRoom().totalMoneyRoom();
                 break;
 
 
@@ -111,14 +125,15 @@ public class ViewHome {
     }
 
 
+
     public void ViewPM() {
         System.out.println("WELCOME PM:  " + currentUser.getName());
         System.out.println("1: User Manager");
         System.out.println("2: Category Manager");
-        System.out.println("3: List Room booked");
-        System.out.println("4: List Room empty");
-        System.out.println("5: Hủy phòng khách đặt");
-        System.out.println("5: Thay đổi phòng khách đặt");
+        System.out.println("3: Room Manager");
+        System.out.println("4: ");
+        System.out.println("5: ");
+        System.out.println("5: ");
         System.out.println("9: Change passwords");
         System.out.println("0: LogOut");
         int choiceAdmin = Integer.parseInt(Config.scanner().nextLine());
@@ -130,10 +145,11 @@ public class ViewHome {
                 new ViewCategory().menuCategory();
                 break;
             case 3:
-
-                case 4:
-                    new ViewRoom().showRoomEmpty();
-                    break;
+                managerRoom();
+                break;
+            case 4:
+                new ViewRoom().showListRoom();
+                break;
             case 9:
                 new ViewMenu().changePassword();
                 break;
@@ -148,21 +164,21 @@ public class ViewHome {
         System.out.println("WELCOME USER:  " + currentUser.getName());
         System.out.println("1: List room Empty");
         System.out.println("2: Book room");
-        System.out.println("3: List Booked room");
-        System.out.println("4: Delete booked room");
+        System.out.println("3: Cancel booked room");
+        System.out.println("4: Room booked and total, days");
         System.out.println("9: Change password");
         System.out.println("0: LogOut");
 
         int choiceUser = Integer.parseInt(Config.scanner().nextLine());
         switch (choiceUser) {
             case 1:
-                new ViewRoom().showRoomEmpty();
+                new ViewRoom().showListRoom();
                 break;
             case 2:
                 new ViewRoom().bookRoom();
                 break;
             case 4:
-                new ViewRoom().deleteRoom();
+                new ViewRoom().showListRoomBooked();
                 break;
             case 9:
                 new ViewMenu().changePassword();

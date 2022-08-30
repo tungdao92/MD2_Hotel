@@ -77,7 +77,7 @@ public class RoomServiceIMPL implements IRoomService, Serializable {
     public void changeStatus(int id) {
         Room room = findById(id);
         room.setStatus(!room.isStatus());
-        updateData();
+        findAll();
     }
 
     @Override

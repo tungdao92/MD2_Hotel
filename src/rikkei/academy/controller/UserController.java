@@ -90,16 +90,18 @@ public class UserController {
         return new ResponseMessenger("success");
     }
 
-    public ResponseMessenger changeRole(int id, String roleName){
+    public ResponseMessenger changeRole(int id, String roleName) {
         if (userService.findById(id) == null || id == 0) {
-            return new ResponseMessenger("not_fond");
+            return new ResponseMessenger("not_found");
         }
-        if(!roleName.equals("user") && !roleName.equals("pm")){
+        if (!roleName.equals("user") && !roleName.equals("pm")) {
             return new ResponseMessenger("invalid_role");
         }
-        Role role = roleName.equals("user") ? roleSerVice.findByName(RoleName.USER): roleSerVice.findByName(RoleName.PM);
+        Role role = roleName.equals("user") ? roleSerVice.findByName(RoleName.USER) : roleSerVice.findByName(RoleName.PM);
         userService.changeRole(id, role);
+        showListUser();
         return new ResponseMessenger("success");
+
     }
 
     public ResponseMessenger blockUser(int id){

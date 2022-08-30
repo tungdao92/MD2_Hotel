@@ -11,7 +11,7 @@ public class ViewCategory {
     List<Category> categoryList = categoryController.showListCategory();
 
     public void menuCategory() {
-        System.out.println("MENU Category");
+        System.out.println("CATEGORY MANAGER");
         System.out.println("1: Create category");
         System.out.println("2: Show list category");
         System.out.println("3: Detail category");

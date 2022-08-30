@@ -35,7 +35,7 @@ public class RoomController {
         roomService.deleteById(id);
     }
 
-    public ResponseMessenger bookRoom(int id){
+    public ResponseMessenger changeStatusRoom(int id){
         if(roomService.findById(id) == null || id == 0){
             return new ResponseMessenger("not_found");
         }
@@ -45,5 +45,12 @@ public class RoomController {
             return new ResponseMessenger("booking");
         }
         return new ResponseMessenger("cancel_booking");
+    }
+
+    public void bookRoom(int id, Room room){
+        Room room1 = roomService.findById(id);
+        room1.setDays(room.getDays());
+        room1.setTotalMoney(room.getTotalMoney());
+        showListRoom();
     }
 }

@@ -12,18 +12,23 @@ public class RoleServiceIMPL implements IRoleSerVice {
     static {
         roleList.add(new Role(1, RoleName.ADMIN));
         roleList.add(new Role(2, RoleName.USER));
+        roleList.add(new Role(3, RoleName.PM));
     }
 
     @Override
     public List<Role> findAll() {
         return roleList;
     }
+    public void save(Role role) {
+        roleList.add(role);
+    }
+
 
     @Override
     public Role findByName(RoleName roleName) {
-        for (int i = 0; i < roleList.size(); i++) {
-            if (roleName == roleList.get(i).getRoleName()) {
-                return roleList.get(i);
+        for (Role role : roleList) {
+            if (role.getRoleName() == roleName) {
+                return role;
             }
         }
         return null;
