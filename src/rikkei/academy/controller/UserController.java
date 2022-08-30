@@ -18,6 +18,7 @@ import java.util.Set;
 public class UserController {
     IUserService userService = new UserServiceIMPL();
     IRoleSerVice roleSerVice = new RoleServiceIMPL();
+    User currentUser = userService.getCurrentUser();
 
     public List<User> showListUser() {
         return userService.findAll();
@@ -43,6 +44,10 @@ public class UserController {
                     Role userRole = roleSerVice.findByName(RoleName.USER);
                     roles.add(userRole);
                     break;
+                case "pm":
+                    Role pmRole = roleSerVice.findByName(RoleName.PM);
+                    roles.add(pmRole);
+                    break;
             }
         });
         User user = new User(signUpDTO.getId(), signUpDTO.getName(), signUpDTO.getUsername(), signUpDTO.getEmail(), signUpDTO.getPassword(), roles);
@@ -52,14 +57,16 @@ public class UserController {
     }
 
 
-    public ResponseMessenger login(SignInDTO signUpDTO) {
-        if (userService.checkLogin(signUpDTO.getUsername(), signUpDTO.getPassword())) {
-            User userLogin = userService.findByUserName(signUpDTO.getUsername());
-            userService.saveCurrentUser(userLogin);
-            return new ResponseMessenger("success");
-        } else {
-            return new ResponseMessenger("login_failed");
+    public ResponseMessenger login(SignInDTO signInDTO) {
+        if (!userService.checkLogin(signInDTO.getUsername(), signInDTO.getPassword())) {
+            return new ResponseMessenger("login failed");
+        } if(userService.findByUserName(signInDTO.getUsername()).isStatus()){
+            return new ResponseMessenger("blocked");
         }
+
+        User userLogin = userService.findByUserName(signInDTO.getUsername());
+        userService.saveCurrentUser(userLogin);
+        return new ResponseMessenger("login_successful");
     }
 
     public User getCurrentUser() {
@@ -72,6 +79,40 @@ public class UserController {
 
     public void deleteUser(int id) {
         userService.deleteById(id);
+    }
+
+    public ResponseMessenger changePassword(String oldPassword, String newPassword) {
+        if (!oldPassword.equals(currentUser.getPassword())) {
+            return new ResponseMessenger("not_match");
+        }
+        currentUser.setPassword(newPassword);
+        userService.findAll();
+        return new ResponseMessenger("success");
+    }
+
+    public ResponseMessenger changeRole(int id, String roleName){
+        if (userService.findById(id) == null || id == 0) {
+            return new ResponseMessenger("not_fond");
+        }
+        if(!roleName.equals("user") && !roleName.equals("pm")){
+            return new ResponseMessenger("invalid_role");
+        }
+        Role role = roleName.equals("user") ? roleSerVice.findByName(RoleName.USER): roleSerVice.findByName(RoleName.PM);
+        userService.changeRole(id, role);
+        return new ResponseMessenger("success");
+    }
+
+    public ResponseMessenger blockUser(int id){
+        if (userService.findById(id) == null || id == 0) {
+            return new ResponseMessenger("not_fond");
+        }
+        userService.changeStatus(id);
+        boolean check = userService.findById(id).isStatus();
+        if(check){
+            return new ResponseMessenger("blocked");
+        } else {
+            return new ResponseMessenger("unblocked");
+        }
     }
 
 }

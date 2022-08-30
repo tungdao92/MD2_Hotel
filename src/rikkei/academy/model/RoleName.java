@@ -1,5 +1,5 @@
 package rikkei.academy.model;
 
 public enum RoleName {
-    USER,ADMIN,
+    USER,ADMIN,PM
 }

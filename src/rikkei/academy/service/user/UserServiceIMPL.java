@@ -1,11 +1,16 @@
 package rikkei.academy.service.user;
 
 import rikkei.academy.config.Config;
+import rikkei.academy.model.Role;
+import rikkei.academy.model.RoleName;
 import rikkei.academy.model.User;
+import rikkei.academy.service.role.RoleServiceIMPL;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class UserServiceIMPL implements IUserService, Serializable {
     public static String PATH_USER = "D:\\_____Case study MD2______\\src\\rikkei\\academy\\database\\user.txt";
@@ -15,6 +20,13 @@ public class UserServiceIMPL implements IUserService, Serializable {
     static {
         if (userList == null) {
             userList = new ArrayList<>();
+            Set<Role> roles = new HashSet<>();
+            roles.add(new RoleServiceIMPL().findByName(RoleName.ADMIN));
+            userList.add(
+                    new User(
+                            0, "ADMIN","admin", "admin@admin.com","admin", roles
+                    )
+            );
         }
     }
 
@@ -104,5 +116,20 @@ public class UserServiceIMPL implements IUserService, Serializable {
     @Override
     public void saveCurrentUser(User user) {
         new Config<User>().writeFile(PATH_USER_SAVE, user);
+    }
+
+    @Override
+    public void changeRole(int id, Role role) {
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
+        findById(id).setRoles(roles);
+        findAll();
+
+    }
+
+    public void changeStatus(int id){
+        User user = findById(id);
+        user.setStatus(!user.isStatus());
+        findAll();
     }
 }

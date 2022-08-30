@@ -91,9 +91,7 @@ public class ViewMenu {
             }
         }
 
-
-        System.out.println("Enter Role");
-        String role = Config.scanner().nextLine();
+        String role = "user";
         Set<String> strRoles = new HashSet<>();
         strRoles.add(role);
         SignUpDTO signUpDTO = new SignUpDTO(id, name, username, email, password, strRoles);
@@ -113,23 +111,23 @@ public class ViewMenu {
                 System.out.println("Invalid role, please try again.");
                 new ViewMenu().menu();
                 break;
-                case "success":
-                    System.out.println("Register successful");
-                    new ViewMenu().menu();
-                    break;
+            case "success":
+                System.out.println("Register successful");
+                new ViewMenu().menu();
+                break;
         }
 
     }
 
 
-    public void formLogin(){
+    public void formLogin() {
         String username;
         boolean validateUsername;
-        while (true){
+        while (true) {
             System.out.println("Enter the username: ");
             username = Config.scanner().nextLine();
-            validateUsername = Pattern.matches("[a-zA-Z0-9]{1,10}",username);
-            if(validateUsername){
+            validateUsername = Pattern.matches("[a-zA-Z0-9]{1,20}", username);
+            if (validateUsername) {
                 break;
             } else {
                 System.err.println("The username failed! Please try again!");
@@ -138,59 +136,115 @@ public class ViewMenu {
 
         String password;
         boolean validatePassword;
-        while (true){
+        while (true) {
             System.out.println("Enter the password: ");
             password = Config.scanner().nextLine();
-            validatePassword = Pattern.matches("[a-zA-Z0-9]{1,40}",password);
-            if(validatePassword){
+            validatePassword = Pattern.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{1,10}$\n", password);
+            if (validatePassword) {
                 break;
             } else {
                 System.err.println("The password failed! Please try again!");
             }
         }
         ResponseMessenger messenger = userController.login(new SignInDTO(username, password));
-        if(messenger.getMessage().equals("login_failed")){
-            System.err.println("Login Filed");
-            formLogin();
-        } else {
-            new  ViewHome();
-
+        switch (messenger.getMessage()) {
+            case "blocked":
+                System.out.println("The user is blocked");
+                break;
+            case "login_successful":
+                System.out.println("Login successful");
+                new ViewHome();
+                break;
+            case "login_failed":
+                System.out.println("Username or password is incorrect");
         }
     }
 
     public void showListUser() {
-        System.out.printf("%-10s |%-15s |%-15s |%-15s |%-15s |%-15s |%-15s|%-15s| %n", "ID", "NAME", "USERNAME", "EMAIL", "AVATAR", "STATUS", "ROLE","PASSWORD");
+        System.out.printf("%-10s |%-15s |%-15s |%-15s |%-15s |%-15s |%-15s|%-15s| %n", "ID", "NAME", "USERNAME", "EMAIL", "AVATAR", "STATUS", "ROLE", "PASSWORD");
         for (int i = 0; i < userList.size(); i++) {
             System.out.printf("%-10s |%-15s |%-15s |%-15s |%-15s |%-15s |%-15s|%-15s| %n", userList.get(i).getId(), userList.get(i).getName(), userList.get(i).getUsername(),
                     userList.get(i).getEmail(), userList.get(i).getAvatar(), userList.get(i).isStatus(), userList.get(i).getRoles().iterator().next().getRoleName(), userList.get(i).getPassword());
         }
-        new ViewHome();
+//        new ViewHome();
     }
 
-    public void deleteUser(){
+    public void deleteUser() {
         System.out.println("Enter ID user want delete");
         int id = Integer.parseInt(Config.scanner().nextLine());
-        if (!isValid(id)){
+        if (!isValid(id)) {
             System.out.println("Not pound");
             new ViewHome();
         }
         System.out.println("You want to delete ( Y/N ) ?");
         String check = Config.scanner().nextLine();
-        if (check.equalsIgnoreCase("Y")){
+        if (check.equalsIgnoreCase("Y")) {
             userController.deleteUser(id);
             userController.showListUser();
             showListUser();
-        } else if (check.equalsIgnoreCase("N")){
+        } else if (check.equalsIgnoreCase("N")) {
             new ViewHome();
         }
         new ViewHome();
     }
 
 
-
-    private boolean isValid(int id){
+    private boolean isValid(int id) {
         int size = userController.showListUser().size();
-        return id >= 0 && id<= size;
+        return id >= 0 && id <= size;
     }
+
+    public void changePassword() {
+        String oldPassword;
+        while (true) {
+            System.out.println("Enter old password");
+            oldPassword = Config.scanner().nextLine();
+            if (oldPassword.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{1,10}$")) {
+                break;
+            } else {
+                System.out.println("Passwords do not match");
+            }
+        }
+
+        System.out.println("Enter new password");
+        String newPassword = Config.scanner().nextLine();
+        System.out.println("Repeat the new password");
+        String newPasswordRepeat = Config.scanner().nextLine();
+        if (!newPasswordRepeat.equals(newPassword)) {
+            System.out.println("New Passwords do not match");
+        } else {
+            ResponseMessenger responseMessenger = userController.changePassword(oldPassword, newPassword);
+            switch (responseMessenger.getMessage()) {
+                case "not_match":
+                    System.out.println("Old password dose not matches");
+                    break;
+                case "success":
+                    System.out.println("Change password successful");
+                    userController.logout();
+                    new ViewMenu().menu();
+            }
+
+        }
+    }
+
+
+        public void blockUser() {
+        showListUser();
+            System.out.println("Enter id user to block or unblock");
+            int id = Config.scanner().nextInt();
+            ResponseMessenger messenger = userController.blockUser(id);
+
+            switch (messenger.getMessage()) {
+                case "not_fond":
+                    System.out.println("ID user not found");
+                    break;
+                case "blocked":
+                    System.out.println("You just blocked user id " + id);
+                    break;
+                case "unblocked":
+                    System.out.println("You just unblocked user id " + id);
+                    break;
+            }
+        }
 
 }
