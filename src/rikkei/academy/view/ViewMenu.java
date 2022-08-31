@@ -41,9 +41,6 @@ public class ViewMenu {
     }
 
 
-
-
-
     private void formRegister() {
         System.out.println("---______FORM_REGISTER_____----");
         int id;
@@ -92,7 +89,7 @@ public class ViewMenu {
         while (true) {
             System.out.println("Enter password: ");
             password = Config.scanner().nextLine();
-            if (password.matches("[a-zA-Z0-9]{1,20}")) {
+            if (password.matches("[a-zA-Z0-9]{1,10}")) {
                 break;
             } else {
                 System.out.println("Invalid password, please try again.");
@@ -147,7 +144,7 @@ public class ViewMenu {
         while (true) {
             System.out.println("Enter the password: ");
             password = Config.scanner().nextLine();
-            validatePassword = Pattern.matches("[a-zA-Z0-9]{1,20}", password);
+            validatePassword = Pattern.matches("[a-zA-Z0-9]{1,10}", password);
             if (validatePassword) {
                 break;
             } else {
@@ -172,7 +169,7 @@ public class ViewMenu {
         System.out.printf("%-10s |%-15s |%-15s |%-15s |%-15s |%-15s |%-15s|%-15s| %n", "ID", "NAME", "USERNAME", "EMAIL", "AVATAR", "STATUS", "ROLE", "PASSWORD");
         for (int i = 0; i < userList.size(); i++) {
             System.out.printf("%-10s |%-15s |%-15s |%-15s |%-15s |%-15s |%-15s|%-15s| %n", userList.get(i).getId(), userList.get(i).getName(), userList.get(i).getUsername(),
-                    userList.get(i).getEmail(), userList.get(i).getAvatar(), (userList.get(i).isStatus()?"Blocked":"Not Blocked"), userList.get(i).getRoles().iterator().next().getRoleName(), userList.get(i).getPassword());
+                    userList.get(i).getEmail(), userList.get(i).getAvatar(), (userList.get(i).isStatus() ? "Blocked" : "Not Blocked"), userList.get(i).getRoles().iterator().next().getRoleName(), userList.get(i).getPassword());
         }
 //        new ViewHome();
     }
@@ -207,7 +204,7 @@ public class ViewMenu {
         while (true) {
             System.out.println("Enter old password");
             oldPassword = Config.scanner().nextLine();
-            if (oldPassword.matches("[a-zA-Z0-9]{1,20}")) {
+            if (oldPassword.matches("[a-zA-Z0-9]{1,10}")) {
                 break;
             } else {
                 System.out.println("Passwords do not match");
@@ -236,7 +233,7 @@ public class ViewMenu {
 
     }
 
-    public void  showRoomEmptyMenu() {
+    public void showRoomEmptyMenu() {
         System.out.println("---______SHOW_ROOMS_EMPTY_____----");
         System.out.printf("%-10s |%-15s |%-15s| %-15s %n", "ID", "TYPE", "PRICE", "STATUS ROOM");
         for (Room room : roomList) {
@@ -250,42 +247,83 @@ public class ViewMenu {
     }
 
 
-        public void blockUser() {
+    public void blockUser() {
         showListUser();
-            System.out.println("Enter id user to block or unblock");
-            int id = Config.scanner().nextInt();
-            ResponseMessenger messenger = userController.blockUser(id);
+        System.out.println("Enter id user to block or unblock");
+        int id = Config.scanner().nextInt();
+        ResponseMessenger messenger = userController.blockUser(id);
 
-            switch (messenger.getMessage()) {
-                case "not_fond":
-                    System.out.println("ID user not found");
-                    break;
-                case "blocked":
-                    System.out.println("You just blocked user id " + id);
-                    break;
-                case "unblocked":
-                    System.out.println("You just unblocked user id " + id);
-                    break;
+        switch (messenger.getMessage()) {
+            case "not_fond":
+                System.out.println("ID user not found");
+                break;
+            case "blocked":
+                System.out.println("You just blocked user id " + id);
+                break;
+            case "unblocked":
+                System.out.println("You just unblocked user id " + id);
+                break;
+        }
+    }
+
+    public void changeRole() {
+        showListUser();
+        System.out.println("Enter id of user to change role");
+        int id = Integer.parseInt(Config.scanner().nextLine());
+        System.out.println("Enter role to change (pm / user)");
+        String roleName = Config.scanner().nextLine();
+
+        ResponseMessenger messenger = userController.changeRole(id, roleName);
+
+        switch (messenger.getMessage()) {
+            case "success":
+                System.out.println("Change role successfully!");
+                break;
+            case "invalid_role":
+                System.err.println("Invalid role!");
+                break;
+            case "not_found":
+                System.out.println("ID not found!");
+        }
+    }
+
+    public void changeProfile() {
+        User user = userController.getCurrentUser();
+        System.out.println("-----Name-----UserName-----Email-----Passwords-----");
+        System.out.println("-----" +user.getName() + " -----" +user.getUsername() + " -----" +user.getEmail() + " -----" +user.getPassword() + " ----");
+
+        String newName;
+        while (true) {
+            System.out.println("Enter new name");
+            newName = Config.scanner().nextLine();
+            if (newName.matches("[A-Z][a-zA-Z0-9]{1,20}")) {
+                break;
+            } else {
+                System.out.println("change name failed, try again");
+            }
+
+        }
+        String newEmail;
+        while (true) {
+            System.out.println("Enter new email");
+            newEmail = Config.scanner().nextLine();
+            if (newEmail.matches(".+@.+")) {
+                break;
+            } else {
+                System.out.println("invalid email, try again");
             }
         }
-        public void changeRole(){
-            showListUser();
-            System.out.println("Enter id of user to change role");
-            int id = Integer.parseInt(Config.scanner().nextLine());
-            System.out.println("Enter role to change (pm / user)");
-            String roleName = Config.scanner().nextLine();
-
-            ResponseMessenger messenger = userController.changeRole(id, roleName);
-
-            switch (messenger.getMessage()) {
-                case "success":
-                    System.out.println("Change role successfully!");
-                    break;
-                case "invalid_role":
-                    System.err.println("Invalid role!");
-                    break;
-                case "not_found":
-                    System.out.println("ID not found!");
-            }
+        User user1 = new User(user.getId(), newName, user.getUsername(),newEmail, user.getPassword(), user.getRoles());
+        if (userController.exitsByEmail(newEmail)){
+            System.out.println("email existed");
+        }else {
+            userController.changeProfile(user1);
         }
+        userController.changeProfile(user1);
+        System.out.println("Change profile successfully");
+        System.out.println("-----Name-----UserName-----Email-----Passwords-----");
+        System.out.println("-----" +user1.getName() + " -----" +user1.getUsername() + " -----" +user1.getEmail() + " -----" +user1.getPassword() + " ----");
+        new ViewHome();
+
+    }
 }

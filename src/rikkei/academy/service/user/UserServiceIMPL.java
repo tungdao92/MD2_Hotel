@@ -18,7 +18,7 @@ public class UserServiceIMPL implements IUserService, Serializable {
     public static Config<List<User>> userConfig = new Config<>();
     public static List<User> userList = userConfig.readFile(PATH_USER);
     static {
-        if (userList == null) {
+        if (userList == null || userList.size() == 0) {
             userList = new ArrayList<>();
             Set<Role> roles = new HashSet<>();
             roles.add(new RoleServiceIMPL().findByName(RoleName.ADMIN));
@@ -132,4 +132,14 @@ public class UserServiceIMPL implements IUserService, Serializable {
         user.setStatus(!user.isStatus());
         findAll();
     }
+
+    @Override
+    public void changeProfile(User user) {
+        User user2 = findByUserName(user.getUsername());
+        user2.setName(user.getName());
+        user2.setEmail(user.getEmail());
+        userConfig.writeFile(PATH_USER, userList);
+
+    }
+
 }

@@ -13,5 +13,6 @@ public interface IUserService extends IGenericService <User> {
     void saveCurrentUser(User user);
     void changeRole(int id, Role role);
     void changeStatus(int id);
+    void changeProfile(User user);
 
 }

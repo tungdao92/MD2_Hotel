@@ -117,5 +117,12 @@ public class UserController {
         }
 
     }
+    public void changeProfile(User user){
+        userService.changeProfile(user);
+    }
+
+    public boolean exitsByEmail(String email){
+        return userService.existsByEmail(email);
+    }
 
 }

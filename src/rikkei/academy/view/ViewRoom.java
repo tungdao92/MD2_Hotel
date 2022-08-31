@@ -43,11 +43,8 @@ public class ViewRoom {
         for (Room room : roomList) {
             System.out.printf("%-10d |%-15s |%-15d |%-15s %n ", room.getId(),room.getTypeRoom(), room.getPrice() ,(room.isStatus()?"Empty": "Not Empty" ));
         }
-//        System.out.println("Enter 'back' to back menu");
-//        String back = Config.scanner().nextLine();
-//        if (back.equalsIgnoreCase("back")) {
-//            new ViewHome();
-//        }
+        new ViewHome();
+
 
     }
 
@@ -112,9 +109,9 @@ public class ViewRoom {
 
 
     public void showListRoomBooked() {
-        System.out.printf("%-10s |%-15s |%-15s| %-15s |%-15s %n", "ID", "TYPE", "PRICE", "DAYS","TOTAL MONEY");
+        System.out.printf("%-10s |%-15s |%-15s| %-15s |%-15s |%-15s %n", "ID", "TYPE", "PRICE", "DAYS","TOTAL MONEY", "USER NAME");
         for (Room room : roomList) {
-            System.out.printf("%-10d |%-15s |%-15d |%-15d |%-15s%n ", room.getId(),room.getTypeRoom(), room.getPrice(),room.getDays() ,room.getTotalMoney());
+            System.out.printf("%-10d |%-15s |%-15d |%-15d |%-15s |%-15s %n ", room.getId(),room.getTypeRoom(), room.getPrice(),room.getDays() ,room.getTotalMoney(), room.getUser().getUsername());
         }
 
     }
